@@ -49,7 +49,7 @@ public class CommandLineController implements Controller {
      * prompts file and asks name of the user
      */
     private void promptFile() {
-        view.displayMessage("Provide path to .txt file obtained from IMessage");
+        view.displayMessage("Provide path to .txt file obtained from IMessage Exporter");
         String stringPath = this.inputScanner.next();
         Path path = null;
         try {

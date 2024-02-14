@@ -72,7 +72,8 @@ public class Conversation implements Model {
             String dateLine = this.scanner.nextLine();
             if (dateLine.equals("") 
             || dateLine.startsWith(" ") 
-            || dateLine.startsWith("\t")) {
+            || dateLine.startsWith("\t")
+            || !this.checkIfDate(dateLine)) {
                 continue;
             } 
             LocalDateTime dateTime = this.findDateTime(dateLine);
@@ -144,7 +145,7 @@ public class Conversation implements Model {
             monthNum = 12;
                 break;
             default:
-                break;
+                return null;
         }
         Month monthObject = Month.of(monthNum);
         int dayOfMonth = Integer.parseInt(line.substring(4, 6));
@@ -199,6 +200,27 @@ public class Conversation implements Model {
             throw new IllegalStateException("Unknown Reaction");
         }
     } 
+
+    /**
+     * returns true if the line starts with a date 
+     * 
+     * @param line line being read
+     * @return true if the line starts with a month
+     */
+    private boolean checkIfDate(String line) {
+        return line.startsWith("Jan") 
+        || line.startsWith("Feb")
+        || line.startsWith("Mar")
+        || line.startsWith("Apr")
+        || line.startsWith("May")
+        || line.startsWith("Jun")
+        || line.startsWith("Jul")
+        || line.startsWith("Aug")
+        || line.startsWith("Sep")
+        || line.startsWith("Oct")
+        || line.startsWith("Nov")
+        || line.startsWith("Dec");
+    }
 
 
     
