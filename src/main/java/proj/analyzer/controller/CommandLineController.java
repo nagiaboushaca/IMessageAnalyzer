@@ -41,7 +41,9 @@ public class CommandLineController implements Controller {
         for (Sender s : this.model.getSenders()) {
             System.out.println(s.getName() + ": " + s.getNumber());
         }
+        runKeywordAnalytics();
         this.inputScanner.close();
+        view.displayMessage("Thank you for running IMessageAnalyzer");
     }
 
     /**
@@ -82,4 +84,28 @@ public class CommandLineController implements Controller {
         }
     }
     
+    /**
+     * runs and prompts user for analytics on keywords
+     */
+    private void runKeywordAnalytics() {
+        boolean continueKeywordAnalytics = true;
+        while (continueKeywordAnalytics) {
+            view.displayMessage("Type in keyword(s) to get analytics");
+            String keyword = this.inputScanner.nextLine();
+            for (Sender s : this.model.getSenders()) {
+                view.displayMessage(
+                    s.getName() 
+                    + ": " 
+                    + this.model.countOccurences(s, keyword)
+                    + " occurences of "
+                    + keyword);
+            }
+            view.displayMessage("type q to cancel or any other key to keep running analytics");
+            String response = this.inputScanner.nextLine();
+            if (response == "q") {
+                continueKeywordAnalytics = false;
+            }
+            this.inputScanner.nextLine();
+        }
+    }
 }
