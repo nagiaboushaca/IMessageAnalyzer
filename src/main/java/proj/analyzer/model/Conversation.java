@@ -104,7 +104,7 @@ public class Conversation implements Model {
      * @return the local date time of the message
      */
     private LocalDateTime findDateTime(String line) {
-        String month = line.substring(0,2);
+        String month = line.substring(0,3);
         int monthNum = 0;
         switch (month) {
             case "Jan":
@@ -147,9 +147,13 @@ public class Conversation implements Model {
                 break;
         }
         Month monthObject = Month.of(monthNum);
-        int dayOfMonth = Integer.parseInt(line.substring(4, 5));
-        int year = Integer.parseInt(line.substring(8, 11));
-        LocalTime localTime = LocalTime.parse(line.substring(13, 20));
+        int dayOfMonth = Integer.parseInt(line.substring(4, 6));
+        int year = Integer.parseInt(line.substring(8, 12));
+        String localTimeString = line.substring(13, 21);
+        if (localTimeString.startsWith(" ")) {
+            localTimeString = "0" + localTimeString.trim();
+        }
+        LocalTime localTime = LocalTime.parse(localTimeString);
 
         return LocalDateTime.of(year, monthObject, dayOfMonth, localTime.getHour(), localTime.getMinute(), localTime.getSecond());
     }
@@ -166,7 +170,9 @@ public class Conversation implements Model {
                 return s;
             }
         }
-        return new Sender(line);
+        Sender newSender = new Sender(line);
+        this.addSender(newSender);
+        return newSender;
     } 
 
     /**

@@ -40,6 +40,9 @@ public class CommandLineController implements Controller {
         this.promptFile();
         this.model.scanText();
         this.promptNames();
+        for (Sender s : this.model.getSenders()) {
+            System.out.println(s.getName() + ": " + s.getNumber());
+        }
     }
 
     /**
@@ -71,8 +74,11 @@ public class CommandLineController implements Controller {
      */
     private void promptNames() {
         for (Sender s : this.model.getSenders()) {
+            if (s.getNumber().equals("Me")) {
+                continue;
+            }
             view.displayMessage("What is the contact name of this number?: " + s.getNumber());
-            String name = this.inputScanner.nextLine();
+            String name = this.inputScanner.next();
             s.setName(name);
         }
     }

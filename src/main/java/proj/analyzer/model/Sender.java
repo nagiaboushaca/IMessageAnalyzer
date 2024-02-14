@@ -29,4 +29,13 @@ public class Sender {
         return this.number;
     }
 
+    /**
+     * getter for the name of the sender
+     * 
+     * @return the name of this sender
+     */
+    public String getName() {
+        return this.name;
+    }
+
 }
