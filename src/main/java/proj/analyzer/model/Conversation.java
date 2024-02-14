@@ -54,7 +54,13 @@ public class Conversation implements Model {
      * Counts how many occurences a certain keyword appears from a sender
      */
     public int countOccurences(Sender sender, String keyword) {
-        return 0;
+        int count = 0;
+        for (Text t : this.texts) {
+            if (t.getSender().equals(sender) && t.getMessage().contains(keyword)) {
+                count++;
+            }
+        }
+        return count;
     }
 
     /**
@@ -184,6 +190,9 @@ public class Conversation implements Model {
      * @return the appropriate reaction object
      */
     private Reaction findReaction(String line) {
+        if (line.contains("Sticker")) {
+            return new Reaction(ReactionType.STICKER, null);
+        }
         int index = line.indexOf("by") + 3;
         Sender sender = this.findSender(line.substring(index));
         if (line.startsWith("Loved")) { 
@@ -196,7 +205,10 @@ public class Conversation implements Model {
             return new Reaction(ReactionType.QUESTIONED, sender);
         } else if (line.startsWith("Disliked")) {
             return new Reaction(ReactionType.DISLIKED, sender);
+        } else if (line.startsWith("Laughed")) {
+            return new Reaction(ReactionType.LAUGHED, sender);
         } else {
+            System.out.println(line);
             throw new IllegalStateException("Unknown Reaction");
         }
     } 

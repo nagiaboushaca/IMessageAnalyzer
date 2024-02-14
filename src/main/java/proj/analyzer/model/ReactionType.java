@@ -9,5 +9,6 @@ public enum ReactionType {
     DISLIKED,
     LAUGHED,
     EMPHASIZED,
-    QUESTIONED
+    QUESTIONED,
+    STICKER
 }

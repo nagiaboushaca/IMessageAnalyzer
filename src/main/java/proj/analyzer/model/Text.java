@@ -34,5 +34,32 @@ public class Text {
         this.time = time;
     }
 
+    /**
+     * getter for senders
+     * 
+     * @return the Sender of this text
+     */
+    public Sender getSender() {
+        return this.sender;
+    }
+
+    /**
+     * getter for message
+     * 
+     * @return the message of this text
+     */
+    public String getMessage() {
+        return this.message;
+    }
+
+    /**
+     * getter for date time of text
+     * 
+     * @return the datetime of this text
+     */
+    public LocalDateTime getTime() {
+        return this.time;
+    }
+
 
 }

@@ -17,7 +17,6 @@ import proj.analyzer.view.View;
  */
 public class CommandLineController implements Controller {
     private Scanner inputScanner;
-    private Readable input;
     private Model model;
     private View view;
 
@@ -28,8 +27,7 @@ public class CommandLineController implements Controller {
      */
     public CommandLineController(View view) {
         this.view = view;
-        this.input = new InputStreamReader(System.in);
-        this.inputScanner = new Scanner(input);
+        this.inputScanner = new Scanner(System.in);
     }
 
     /**
@@ -37,12 +35,13 @@ public class CommandLineController implements Controller {
      */
     @Override
     public void run() {
-        this.promptFile();
+        promptFile();
         this.model.scanText();
-        this.promptNames();
+        promptNames();
         for (Sender s : this.model.getSenders()) {
             System.out.println(s.getName() + ": " + s.getNumber());
         }
+        this.inputScanner.close();
     }
 
     /**
@@ -57,9 +56,9 @@ public class CommandLineController implements Controller {
         } catch (InvalidPathException e) {
             System.err.println("Path given is invalid");
         }
-
+        this.inputScanner.nextLine();
         view.displayMessage("What is your name?");
-        String name = this.inputScanner.next();
+        String name = this.inputScanner.nextLine();
         Sender me = new Sender("Me");
         me.setName(name);
         List<Sender> listSenders = new ArrayList<Sender>();
@@ -78,7 +77,7 @@ public class CommandLineController implements Controller {
                 continue;
             }
             view.displayMessage("What is the contact name of this number?: " + s.getNumber());
-            String name = this.inputScanner.next();
+            String name = this.inputScanner.nextLine();
             s.setName(name);
         }
     }
