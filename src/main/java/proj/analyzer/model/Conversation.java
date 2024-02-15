@@ -90,8 +90,7 @@ public class Conversation implements Model {
         try {
             this.scanner = new Scanner(this.filePath);
         } catch (IOException e) {
-            System.err.println("could not scan document");
-            e.printStackTrace();
+            throw new IllegalArgumentException("file could not be opened");
         }
 
         while (this.scanner.hasNextLine()) {

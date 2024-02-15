@@ -37,7 +37,13 @@ public class CommandLineController implements Controller {
     @Override
     public void run() {
         promptFile();
-        this.model.scanText();
+        try {
+            this.model.scanText();
+        } catch (IllegalArgumentException e) {
+            System.out.println("could not open file, make sure your path is correct");
+            run();
+        }
+        
         promptNames();
         for (Sender s : this.model.getSenders()) {
             System.out.println(s.getName() + ": " + s.getNumber());
@@ -58,6 +64,7 @@ public class CommandLineController implements Controller {
             path = Path.of(stringPath);
         } catch (InvalidPathException e) {
             System.err.println("Path given is invalid");
+            this.promptFile();
         }
         this.inputScanner.nextLine();
         view.displayMessage("What is your name?");
