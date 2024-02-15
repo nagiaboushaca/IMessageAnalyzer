@@ -7,6 +7,11 @@ public class Sender {
     private String name;
     private String number;
 
+    /**
+     * constructor 
+     * 
+     * @param number phone number of the sender
+     */
     public Sender(String number) {
         this.number = number;
     }

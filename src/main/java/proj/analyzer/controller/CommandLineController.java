@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 import proj.analyzer.model.Conversation;
 import proj.analyzer.model.Model;
+import proj.analyzer.model.ReactionType;
 import proj.analyzer.model.Sender;
 import proj.analyzer.view.View;
 
@@ -41,7 +42,7 @@ public class CommandLineController implements Controller {
         for (Sender s : this.model.getSenders()) {
             System.out.println(s.getName() + ": " + s.getNumber());
         }
-        runKeywordAnalytics();
+        analyticsMode();
         this.inputScanner.close();
         view.displayMessage("Thank you for running IMessageAnalyzer");
     }
@@ -83,29 +84,82 @@ public class CommandLineController implements Controller {
             s.setName(name);
         }
     }
+
+    /**
+     * runs the main loop for the analytics mode
+     */
+    private void analyticsMode() {
+        view.displayMessage("Press the key for which analytics mode you would like to run: ");
+        view.displayMessage("a: keywordAnalytics, b: reactionsAnalytics, c: timestamp analytics");
+        String answer = this.inputScanner.next();
+        switch (answer) {
+            case "a":
+                runKeywordAnalytics();
+                break;
+            case "b":
+                runReactionsAnalytics();
+                break;
+            case "c":
+                // runTimestampAnalytics();
+                break;
+            case "q":
+                return;
+            default:
+                view.displayMessage("Invalid mode");
+                break;
+        }
+        this.inputScanner.nextLine();
+        analyticsMode();
+    }
     
     /**
      * runs and prompts user for analytics on keywords
      */
     private void runKeywordAnalytics() {
-        boolean continueKeywordAnalytics = true;
-        while (continueKeywordAnalytics) {
-            view.displayMessage("Type in keyword(s) to get analytics");
-            String keyword = this.inputScanner.nextLine();
+        boolean continueAnalytics = true;
+        while (continueAnalytics) {
+            view.displayMessage("Type in keyword(s) to get analytics. Separate keywords by commas");
+            view.displayMessage("E.g., hello, hi will total up occurences of both per sender");
+            String keywords = this.inputScanner.nextLine();
+            String[] keywordArray = keywords.split("[,]");
             for (Sender s : this.model.getSenders()) {
+                int total = 0;
+                for (String str: keywordArray) {
+                    total += this.model.countOccurences(s, str);
+                }
                 view.displayMessage(
                     s.getName() 
                     + ": " 
-                    + this.model.countOccurences(s, keyword)
+                    + total
                     + " occurences of "
-                    + keyword);
+                    + keywords);
             }
+
             view.displayMessage("type q to cancel or any other key to keep running analytics");
             String response = this.inputScanner.nextLine();
             if (response == "q") {
-                continueKeywordAnalytics = false;
+                continueAnalytics = false;
             }
             this.inputScanner.nextLine();
+        }
+    }
+
+     /**
+     * runs and prompts user for analytics on reactions
+     */
+    private void runReactionsAnalytics() {
+        view.displayMessage("Showing Reactions by Type: ");
+        for (Sender s : this.model.getSenders()) {
+            for (ReactionType r: ReactionType.values()) {
+                view.displayMessage(
+                    s.getName()
+                    + " has "
+                    + this.model.countReactions(s, r)
+                    + " occurences of "
+                    + r.name()
+                    + " reactions");
+            }
+            view.displayMessage("\n");
         }
     }
 }

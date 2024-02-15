@@ -54,10 +54,30 @@ public class Conversation implements Model {
      * Counts how many occurences a certain keyword appears from a sender
      */
     public int countOccurences(Sender sender, String keyword) {
+        String trimmedKeyword = keyword.trim();
         int count = 0;
         for (Text t : this.texts) {
-            if (t.getSender().equals(sender) && t.getMessage().contains(keyword)) {
+            if (t.getSender().equals(sender) && t.getMessage().toLowerCase().contains(trimmedKeyword.toLowerCase())) {
                 count++;
+            }
+        }
+        return count;
+    }
+
+    /**
+     * counts the number of reactions for the given type
+     * 
+     * @param sender the sender
+     * @param reactionType the reaction type 
+     * @return the number of occurences of that reaction from the sender
+     */
+    public int countReactions(Sender sender, ReactionType reactionType) {
+        int count = 0;
+        for (Text t : this.texts) {
+            for (Reaction r: t.getReactions()) {
+                if (r.getSender().equals(sender) && r.getReactionType().equals(reactionType)) {
+                    count++;
+                }
             }
         }
         return count;
@@ -191,7 +211,12 @@ public class Conversation implements Model {
      */
     private Reaction findReaction(String line) {
         if (line.contains("Sticker")) {
-            return new Reaction(ReactionType.STICKER, null);
+            if (line.contains("Me") && !line.contains("+")) {
+                return new Reaction(ReactionType.STICKER, this.findSender("Me"));
+            } else {
+                return new Reaction(ReactionType.STICKER, this.findSender(line.substring(line.indexOf("+"), line.indexOf(":"))));
+            }
+            
         }
         int index = line.indexOf("by") + 3;
         Sender sender = this.findSender(line.substring(index));

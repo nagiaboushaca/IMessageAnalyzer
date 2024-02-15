@@ -38,4 +38,13 @@ public interface Model {
      * @return the number of occurences of the keyword from sender
      */
     public int countOccurences(Sender sender, String keyword);
+
+    /**
+     * counts the number of reactions for the given type
+     * 
+     * @param sender the sender
+     * @param reactionType the reaction type 
+     * @return the number of occurences of that reaction from the sender
+     */
+    public int countReactions(Sender sender, ReactionType reactionType);
 }

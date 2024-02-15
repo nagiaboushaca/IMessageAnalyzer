@@ -61,5 +61,14 @@ public class Text {
         return this.time;
     }
 
+    /**
+     * getter for reactions
+     * 
+     * @return the reactions on this text
+     */
+    public List<Reaction> getReactions() {
+        return this.reactions;
+    }
+
 
 }
