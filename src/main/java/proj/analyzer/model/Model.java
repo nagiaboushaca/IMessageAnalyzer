@@ -47,4 +47,13 @@ public interface Model {
      * @return the number of occurences of that reaction from the sender
      */
     public int countReactions(Sender sender, ReactionType reactionType);
+
+    /**
+     * counts the timestamp keyword if and only if it was sent at the appropriate time
+     * 
+     * @param sender sender of the message
+     * @param keyword the timestamp keyword (e.g., 1111, 111, 222, 123)
+     * @return the number of valid occurences of that timestamp
+     */
+    public int countTimeStamps(Sender sender, String keyword);
 }

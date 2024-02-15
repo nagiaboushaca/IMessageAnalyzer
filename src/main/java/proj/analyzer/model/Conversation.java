@@ -258,6 +258,37 @@ public class Conversation implements Model {
         || line.startsWith("Dec");
     }
 
+    /**
+     * counts the timestamp keyword if and only if it was sent at the appropriate time
+     * 
+     * @param sender sender of the message
+     * @param keyword the timestamp keyword (e.g., 1111, 111, 222, 123)
+     * @return the number of valid occurences of that timestamp
+     */
+    public int countTimeStamps(Sender sender, String keyword) {
+        int count = 0;
+        for (Text t : this.texts) {
+            if (t.getSender().equals(sender) && t.getMessage().equals(keyword)) {
+                StringBuilder output = new StringBuilder();
+                int hour = t.getTime().getHour();
+                int minute = t.getTime().getMinute();
+                if (hour == 0) {
+                    output.append("12");
+                    
+                } else if (hour > 12) {
+                    output.append(Integer.toString(hour - 12));
+                } else {
+                    output.append(Integer.toString(hour));
+                }
+                output.append(Integer.toString(minute));
+                if (output.toString().equals(keyword)) {
+                    count++;
+                }
+            } 
+        }
+        return count;
+    }
+
 
     
 }

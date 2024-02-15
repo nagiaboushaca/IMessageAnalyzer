@@ -4,6 +4,7 @@ import java.io.InputStreamReader;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -115,7 +116,6 @@ public class CommandLineController implements Controller {
                 view.displayMessage("Invalid mode");
                 break;
         }
-        this.inputScanner.nextLine();
         analyticsMode();
     }
     
@@ -123,31 +123,22 @@ public class CommandLineController implements Controller {
      * runs and prompts user for analytics on keywords
      */
     private void runKeywordAnalytics() {
-        boolean continueAnalytics = true;
-        while (continueAnalytics) {
-            view.displayMessage("Type in keyword(s) to get analytics. Separate keywords by commas");
-            view.displayMessage("E.g., hello, hi will total up occurences of both per sender");
-            String keywords = this.inputScanner.nextLine();
-            String[] keywordArray = keywords.split("[,]");
-            for (Sender s : this.model.getSenders()) {
-                int total = 0;
-                for (String str: keywordArray) {
-                    total += this.model.countOccurences(s, str);
-                }
-                view.displayMessage(
-                    s.getName() 
-                    + ": " 
-                    + total
-                    + " occurences of "
-                    + keywords);
+        view.displayMessage("Type in keyword(s) to get analytics. Separate keywords by commas");
+        view.displayMessage("E.g., hello, hi will total up occurences of both per sender");
+        this.inputScanner.nextLine();
+        String keywords = this.inputScanner.nextLine();
+        String[] keywordArray = keywords.split("[,]");
+        for (Sender s : this.model.getSenders()) {
+            int total = 0;
+            for (String str: keywordArray) {
+                total += this.model.countOccurences(s, str);
             }
-
-            view.displayMessage("type q to cancel or any other key to keep running analytics");
-            String response = this.inputScanner.nextLine();
-            if (response == "q") {
-                continueAnalytics = false;
-            }
-            this.inputScanner.nextLine();
+            view.displayMessage(
+                s.getName() 
+                + ": " 
+                + total
+                + " occurences of "
+                + keywords);
         }
     }
 
@@ -174,6 +165,23 @@ public class CommandLineController implements Controller {
      * runs analytics on timestamps
      */
     private void runTimestampAnalytics() {
-        view.displayMessage("Showing Reactions by Type: ");
+        view.displayMessage("Showing Timestamp analytics: ");
+        List<String> angelNumbers = 
+            Arrays.asList("1111", "1234", "123", "111", "222", "333", "444", "555", "234", "345", "456", "319", "423");
+        
+        for (Sender s: this.model.getSenders()) {
+            int total = 0;
+            for (String angelNum : angelNumbers) {
+                view.displayMessage("counting valid " + angelNum + "s...");
+                view.displayMessage(
+                        s.getName()
+                        + " has "
+                        + this.model.countTimeStamps(s, angelNum)
+                        + " valid occurences of "
+                        + angelNum);
+                total += this.model.countTimeStamps(s, angelNum);
+            }
+            view.displayMessage(s.getName() + " for a total of " + total + " valid angel numbers");
+        }
     }
 }
