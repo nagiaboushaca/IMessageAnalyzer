@@ -107,7 +107,7 @@ public class CommandLineController implements Controller {
                 runReactionsAnalytics();
                 break;
             case "c":
-                // runTimestampAnalytics();
+                runTimestampAnalytics();
                 break;
             case "q":
                 return;
@@ -152,7 +152,7 @@ public class CommandLineController implements Controller {
     }
 
      /**
-     * runs and prompts user for analytics on reactions
+     * runs analytics on reactions
      */
     private void runReactionsAnalytics() {
         view.displayMessage("Showing Reactions by Type: ");
@@ -168,5 +168,12 @@ public class CommandLineController implements Controller {
             }
             view.displayMessage("\n");
         }
+    }
+
+    /**
+     * runs analytics on timestamps
+     */
+    private void runTimestampAnalytics() {
+        view.displayMessage("Showing Reactions by Type: ");
     }
 }
